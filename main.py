@@ -56,6 +56,7 @@ async def obtener(nombre: str):
     detail=f"No existe el equipo {nombre}")
     return equipo
 
+
 @app.put("/dispositivos/{nombre}")
 async def reemplazar(nombre: str, datos: Dispositivo):
     """Sustituye por completo el registro de un equipo."""
