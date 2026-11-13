@@ -3,7 +3,7 @@
 Alumno:    ULISES RUIZ MORALES
 Matrícula: 125053372
 """
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from pydantic import BaseModel
 
 app = FastAPI(title="Inventario de red")
@@ -76,3 +76,13 @@ async def modificar(nombre: str, cambios: DispositivoParcial):
     for campo, valor in cambios.model_dump(exclude_unset=True).items():
         setattr(equipo, campo, valor)
     return equipo
+
+@app.delete("/dispositivos/{nombre}", status_code=204)
+async def eliminar(nombre: str):
+    """Da de baja un equipo del inventario."""
+    equipo = buscar(nombre)
+    if equipo is None:
+        raise HTTPException(status_code=404,
+            detail=f"No existe el equipo {nombre}")
+    inventario.remove(equipo)
+    return Response(status_code=204)
